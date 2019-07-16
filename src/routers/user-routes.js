@@ -137,7 +137,7 @@ const upload = multer({
         //cb(undefined , false) //silently rejectin the file
 
         if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-            return cb(new Error('Expecting a .doc or .docx file'))
+            return cb(new Error({ error:'Expecting a .jpg, .jpeg or .png file' }))
         }
 
         cb(undefined , true)
