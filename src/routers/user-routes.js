@@ -13,13 +13,16 @@ router.post('/users' , async (req , res) => {
     const user = new User(req.body)
 
     try{
-        await user.save()  //Upto here the token array is empty
+        await user.save() 
         sendWelcomeEmail(user.email , user.name)
         const token = await user.generateAuthToken()
 
-        res.status(201).send({ user, token })
+        // res.status(201).send({ user : user.getPublicProfile(), token })  // FOR WAY 1: TO HIDE DATA SEND TO USER
+
+        res.status(201).send({ user, token }) // NOTE: res.send() calls 'JSON.stringify()' behind the scenes 
+                                             //To convervt plain JS Object to JSON 
     }catch (e) {
-        res.status(400).send()
+        res.status(400).send(e)
     }
 
 })
@@ -101,7 +104,7 @@ router.patch('/users/me' , auth , async (req , res) => {
 
         await req.user.save()
 
-        // const user = await User.findByIdAndUpdate(req.params.id , req.body , { new:true , runValidators:true })   //=>this mongoose query fn. bypasses the middlewares on schemas
+        // const user = await User.findByIdAndUpdate(req.params.id , req.body , { new:true , runValidators:true })   //=>this mongoose query fn. bypasses the hashing middleware fn. before save
 
         res.send(req.user)
     } catch (e) {

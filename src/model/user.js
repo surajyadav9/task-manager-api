@@ -66,10 +66,20 @@ userSchema.virtual('tasks' , {
 
 
 
-// Hiding the credentials before it send to the user
+// Hiding the credentials before it send to the user : 2 WAYS
+
+// WAY:1
+// userSchema.methods.getPublicProfile = function(){
+//     const user = this
+//     const userObject = user.toObject()  // converts this document into plain javaScript Object
+
+//     return userObject;
+// }
+
+// RECOMENDED WAY
 userSchema.methods.toJSON = function () {  // trigers when the res.send() is called 
     const user = this
-    var userObject = user.toObject()   
+    var userObject = user.toObject() // Converts this document to plain JS Object   
 
     delete userObject.password
     delete userObject.tokens
@@ -80,7 +90,7 @@ userSchema.methods.toJSON = function () {  // trigers when the res.send() is cal
 
 
 //JWT
-//.method => property defined on instences of models
+//schema.method.methodName => Define custom method on document-instance & individual user
 userSchema.methods.generateAuthToken = async function() {
 
     user = this
@@ -97,7 +107,7 @@ userSchema.methods.generateAuthToken = async function() {
 
 
 //Loging user 
-//.statics => property defined on Schema
+//schema.statics.methodName => Define custom method on 'User' model 
 userSchema.statics.findByCredentials = async (email , password) => {
     
     const user = await User.findOne({ email })
@@ -116,7 +126,7 @@ userSchema.statics.findByCredentials = async (email , password) => {
 }
 
 
-//Middleware/Hook, hash the password before save 
+// Middleware, hash the password before save 
 userSchema.pre('save' , async function(next){
     const user = this   // here this refers to the document which is about to save
 

@@ -11,7 +11,7 @@ const port = process.env.PORT
 //Middleware for maintainance
 
 // app.use((req , res , next)=>{
-//     res.status(503).send({"Excuse us":"Our site is under maintainance , Please give a try soon! :)"})
+//     res.status(503).send({"Excuse us":"Our site is under maintainance , Please give a try soon!"})
 // })
 
 
@@ -24,3 +24,20 @@ app.use(taskRouter)      //Register task router with express app
 app.listen(port , () => {
     console.log('Server is connected on port ' + port)
 })
+
+
+// Playground :=>
+
+
+//1. .toJSON : behind the Scenes
+
+// const pet = {
+//     name : 'Hal'
+// }
+
+// pet.toJSON = function(){ // is called ,Whenever the object is 'stingified'
+//     //return {}
+//     return this
+// }
+
+// console.log(JSON.stringify(pet)) //{} , when empty object is returned from 'toJSON', Otherwise the normal behaviour
